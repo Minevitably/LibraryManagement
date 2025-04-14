@@ -17,9 +17,9 @@ CREATE TABLE users (
 
 -- 插入管理员用户
 INSERT INTO users (username, password, name, user_type)
-VALUES ('admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '系统管理员', 'admin');
+VALUES ('admin', '123456', '系统管理员', 'admin');
 
 -- 插入普通读者用户
 INSERT INTO users (username, password, name, user_type)
-VALUES ('reader1', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '张三', 'reader'),
-       ('reader2', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', '李四', 'reader');
+VALUES ('reader1', '123456', '张三', 'reader'),
+       ('reader2', '123456', '李四', 'reader');
