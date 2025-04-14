@@ -15,7 +15,8 @@ public:
     static QSqlDatabase getConnection();
 
     // 初始化数据库配置
-    static bool initConfig(const QString& configPath = "dbconfig.ini");
+    static bool initConfig(const QString& configPath =
+            "resources/dbconfig.ini");
 
 private:
     static QString driver;

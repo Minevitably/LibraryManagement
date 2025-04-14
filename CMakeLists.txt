@@ -64,6 +64,14 @@ set_target_properties(LibraryManagement PROPERTIES
         AUTOUIC_SEARCH_PATHS ${CMAKE_CURRENT_SOURCE_DIR}/resources/form
 )
 
+
+configure_file(
+        ${CMAKE_SOURCE_DIR}/resources/dbconfig.ini    # 源文件路径（项目中的原始文件）
+        ${CMAKE_BINARY_DIR}/resources/dbconfig.ini    # 目标路径（构建目录中的副本）
+        COPYONLY
+)
+
+
 if(QT_VERSION_MAJOR EQUAL 6)
     qt_finalize_executable(LibraryManagement)
 endif()
