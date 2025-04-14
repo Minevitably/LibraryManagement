@@ -1,12 +1,12 @@
 #include "dbutil.h"
 
 // 初始化静态成员变量
-QString DBUtil::driver = "QMYSQL";
-QString DBUtil::host = "localhost";
-int DBUtil::port = 3306;
-QString DBUtil::dbname = "teacher_scheduling_system";
-QString DBUtil::username = "root";
-QString DBUtil::password = "123456";
+QString DBUtil::driver;
+QString DBUtil::host;
+int DBUtil::port;
+QString DBUtil::dbname;
+QString DBUtil::username;
+QString DBUtil::password;
 bool DBUtil::isInitialized = false;
 
 bool DBUtil::initConfig(const QString& configPath) {
@@ -23,21 +23,22 @@ bool DBUtil::initConfig(const QString& configPath) {
         return false;
     }
 
-    // 读取配置信息
-    driver = settings.value("database/driver", "QMYSQL").toString();
-    host = settings.value("database/host", "localhost").toString();
-    port = settings.value("database/port", 3306).toInt();
-    dbname = settings.value("database/dbname", "teacher_scheduling_system").toString();
-    username = settings.value("database/username", "root").toString();
-    password = settings.value("database/password", "123456").toString();
+
+    // 读取配置信息（不再提供默认值）
+    driver = settings.value("database/driver").toString();
+    host = settings.value("database/host").toString();
+    port = settings.value("database/port").toInt();
+    dbname = settings.value("database/dbname").toString();
+    username = settings.value("database/username").toString();
+    password = settings.value("database/password").toString();
 
     isInitialized = true;
     return true;
 }
 
 QSqlDatabase DBUtil::getConnection() {
-    if (!isInitialized) {
-        initConfig();
+    if (!isInitialized && !initConfig()) {
+        return QSqlDatabase(); // 返回无效的数据库对象
     }
 
     // 创建唯一连接名称，避免重复连接问题
@@ -55,7 +56,7 @@ QSqlDatabase DBUtil::getConnection() {
         db.setPassword(password);
 
         if (!db.open()) {
-            qDebug() << "Failed to connect to database:" << db.lastError().text();
+            qCritical() << "Failed to connect to database:" << db.lastError().text();
             return QSqlDatabase(); // 返回无效的数据库对象
         }
     }
