@@ -65,9 +65,17 @@ set_target_properties(LibraryManagement PROPERTIES
 )
 
 
+# 复制 dbconfig.ini
 configure_file(
-        ${CMAKE_SOURCE_DIR}/resources/dbconfig.ini    # 源文件路径（项目中的原始文件）
-        ${CMAKE_BINARY_DIR}/resources/dbconfig.ini    # 目标路径（构建目录中的副本）
+        ${CMAKE_SOURCE_DIR}/resources/dbconfig.ini    # 源文件路径
+        ${CMAKE_BINARY_DIR}/resources/dbconfig.ini    # 目标路径
+        COPYONLY
+)
+
+# 复制 remember_me.ini
+configure_file(
+        ${CMAKE_SOURCE_DIR}/resources/remember_me.ini    # 源文件路径
+        ${CMAKE_BINARY_DIR}/resources/remember_me.ini    # 目标路径
         COPYONLY
 )
 

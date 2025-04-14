@@ -18,8 +18,14 @@ Q_OBJECT
 public:
     Widget(QWidget *parent = nullptr);
     ~Widget();
+private:
+    void onRememberMe();
+    void setupReaderUI();
+    void setupAdminUI();
 
 private slots:
+    void onPushButtonLoginClicked();
+    void onPushButtonLogoutClicked();
     void onPushButtonClicked();
 
 private:
