@@ -9,7 +9,7 @@ Widget::Widget(QWidget *parent)
 
     // 初始化时连接数据库并查询
     if(connectToDatabase()) {
-        queryUsers();
+//        queryUsers();
     } else {
         qDebug() << "Failed to connect to database!";
     }
