@@ -2,7 +2,14 @@
 #include "ui_widget.h"
 #include "dbutil.h"
 #include "userdao.h"
+#include "book.h"
+#include "bookdao.h"
 
+
+/**
+ * 构造函数
+ * @param parent
+ */
 Widget::Widget(QWidget *parent)
         : QWidget(parent), ui(new Ui::Widget) {
     ui->setupUi(this);
@@ -13,21 +20,37 @@ Widget::Widget(QWidget *parent)
 
     // 登出按钮
     connect(ui->btnLogout, &QPushButton::clicked,
-            this, &Widget::onbtnLogoutClicked);
+            this, &Widget::onBtnLogoutClicked);
+
+    // 图书检索按钮（切换到图书检索视图）
+    connect(ui->btnSearchBook, &QPushButton::clicked,
+            this, &Widget::onBtnSearchBookClicked);
+
+    // 检索按钮（检索图书）
+    connect(ui->btnSearch, &QPushButton::clicked,
+            this, &Widget::onBtnSearchClicked);
+
     connect(ui->pushButton, &QPushButton::clicked,
             this, &Widget::onPushButtonClicked);
 
-    // 默认位于登录界面
-    ui->stackedWidget->setCurrentIndex(0);
+    // 默认位于登录页面
+    ui->stackedWidget->setCurrentIndex(PAGE_LOGIN);
 
     this->onRememberMe();
 
 }
 
+/**
+ * 析构函数
+ */
 Widget::~Widget() {
     delete ui;
 }
 
+/**
+ * 记住密码
+ * 在程序启动后执行一次，使用配置文件保存状态
+ */
 void Widget::onRememberMe() {
     // 如果resources/remember_me.ini文件存在，并且flag=1
     // 则说明上次用户选择了记住密码，
@@ -62,7 +85,10 @@ void Widget::onRememberMe() {
 
 }
 
-
+/**
+ * 登录按钮
+ * 登录成功后跳转到图书检索视图
+ */
 void Widget::onPushButtonLoginClicked() {
     qDebug() << "Login clicked.";
 
@@ -104,24 +130,40 @@ void Widget::onPushButtonLoginClicked() {
         this->setupReaderUI();
     }
 
-    // 跳转到对应视图
-    ui->stackedWidget->setCurrentIndex(1);
+    // 从登录页面跳转到主页面
+    ui->stackedWidget->setCurrentIndex(PAGE_MAIN);
+    // 图书检索视图
+    ui->stackedWidgetMain->setCurrentIndex(VIEW_SEARCH_BOOK);
 }
 
+/**
+ * 设置登录成功后的读者视图
+ */
 void Widget::setupReaderUI() {
     ui->labelUserType->setText("reader");
+
 }
 
+/**
+ * 设置登录成功后的管理员视图
+ */
 void Widget::setupAdminUI() {
     ui->labelUserType->setText("admin");
 
 }
 
-void Widget::onbtnLogoutClicked() {
-    ui->stackedWidget->setCurrentIndex(0);
+/**
+ * 退出登录按钮
+ * 返回到登录页面
+ */
+void Widget::onBtnLogoutClicked() {
+    ui->stackedWidget->setCurrentIndex(PAGE_LOGIN);
 
 }
 
+/**
+ * 没什么用的按钮，用来测试数据库是否可用
+ */
 void Widget::onPushButtonClicked() {
     ui->label->setText("Database Connected!");
     // 获取数据库连接
@@ -146,6 +188,78 @@ void Widget::onPushButtonClicked() {
     } else {
         qDebug() << "Failed to get database connection";
     }
+}
+
+/**
+ * 图书检索按钮
+ * 切换到图书检索视图
+ */
+void Widget::onBtnSearchBookClicked() {
+    ui->stackedWidgetMain->setCurrentIndex(VIEW_SEARCH_BOOK);
+}
+
+
+/**
+ * 检索图书
+ */
+void Widget::onBtnSearchClicked() {
+    int option = ui->comboBoxSearch->currentIndex();
+    QString searchText = ui->lineEditSearch->text().trimmed();
+
+    QList<Book> bookList;
+
+    // 如果检索文本为空，则检索所有书籍
+    if (searchText.isEmpty()) {
+        bookList = BookDao::getAllBooks();
+    } else {
+        // 根据下拉框选项进行检索
+        switch (option) {
+            case OPTION_TITLE:
+                bookList = BookDao::searchBooksByTitle(searchText);
+                break;
+            case OPTION_AUTHOR:
+                bookList = BookDao::searchBooksByAuthor(searchText);
+                break;
+            case OPTION_ISBN:
+            {
+                Book book = BookDao::getBookByIsbn(searchText);
+                if (book.getId() != -1) {
+                    bookList.append(book);
+                }
+            }
+                break;
+            default:
+                qDebug() << "Wrong Option.";
+                return;
+        }
+    }
+
+    // 清空表格
+    ui->tableWidgetSearch->clearContents();
+    ui->tableWidgetSearch->setRowCount(0);
+
+    // 设置表格列数和标题
+    ui->tableWidgetSearch->setColumnCount(4);
+    QStringList headers;
+    headers << "书名" << "作者" << "ISBN" << "剩余数量";
+    ui->tableWidgetSearch->setHorizontalHeaderLabels(headers);
+
+    // 填充表格数据
+    for (const Book &book : bookList) {
+        int row = ui->tableWidgetSearch->rowCount();
+        ui->tableWidgetSearch->insertRow(row);
+
+        ui->tableWidgetSearch->setItem(row, 0, new QTableWidgetItem(book.getTitle()));
+        ui->tableWidgetSearch->setItem(row, 1, new QTableWidgetItem(book.getAuthor()));
+        ui->tableWidgetSearch->setItem(row, 2, new QTableWidgetItem(book.getIsbn()));
+        ui->tableWidgetSearch->setItem(row, 3, new QTableWidgetItem(QString::number(book.getQuantity())));
+    }
+
+    // 自动调整列宽
+    ui->tableWidgetSearch->resizeColumnsToContents();
+
+    // 显示检索结果数量
+    qDebug() << "Found" << bookList.size() << "books.";
 }
 
 
