@@ -23,7 +23,7 @@
    <item>
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="loginPage">
       <widget class="QPushButton" name="pushButton">
@@ -62,10 +62,9 @@
         </rect>
        </property>
        <property name="styleSheet">
-        <string notr="true">background-color: white
-;</string>
+        <string notr="true"/>
        </property>
-       <widget class="QLabel" name="label_2">
+       <widget class="QLabel" name="labelLib">
         <property name="geometry">
          <rect>
           <x>110</x>
@@ -96,7 +95,7 @@
          </rect>
         </property>
         <property name="text">
-         <string>Login</string>
+         <string>登录</string>
         </property>
        </widget>
        <widget class="QLineEdit" name="lineEditUserName">
@@ -112,7 +111,7 @@
          <string/>
         </property>
         <property name="placeholderText">
-         <string>Username</string>
+         <string>用户名</string>
         </property>
        </widget>
        <widget class="QLineEdit" name="lineEditPassword">
@@ -128,7 +127,7 @@
          <string/>
         </property>
         <property name="placeholderText">
-         <string>Password</string>
+         <string>密码</string>
         </property>
        </widget>
        <widget class="QCheckBox" name="checkBoxRemeberMe">
@@ -141,37 +140,265 @@
          </rect>
         </property>
         <property name="text">
-         <string>remember me</string>
+         <string>记住密码</string>
         </property>
        </widget>
       </widget>
      </widget>
      <widget class="QWidget" name="mainPage">
-      <widget class="QPushButton" name="pushButtonLogout">
+      <widget class="QWidget" name="widgetMenu" native="true">
        <property name="geometry">
         <rect>
-         <x>30</x>
-         <y>460</y>
-         <width>93</width>
-         <height>28</height>
+         <x>20</x>
+         <y>30</y>
+         <width>120</width>
+         <height>531</height>
         </rect>
        </property>
-       <property name="text">
-        <string>退出登录</string>
-       </property>
+       <widget class="QPushButton" name="btnSearchBook">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>40</y>
+          <width>93</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>检索图书</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnBorDetail">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>80</y>
+          <width>93</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>借阅详情</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnSelf">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>130</y>
+          <width>93</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>个人信息</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="btnLogout">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>170</y>
+          <width>93</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>退出登录</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="labelUserType">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>500</y>
+          <width>72</width>
+          <height>15</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>UserType</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="labelLibrary">
+        <property name="geometry">
+         <rect>
+          <x>30</x>
+          <y>10</y>
+          <width>72</width>
+          <height>15</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Library</string>
+        </property>
+       </widget>
       </widget>
-      <widget class="QLabel" name="labelUserType">
+      <widget class="QStackedWidget" name="stackedWidgetMain">
        <property name="geometry">
         <rect>
-         <x>30</x>
-         <y>20</y>
-         <width>72</width>
-         <height>15</height>
+         <x>160</x>
+         <y>30</y>
+         <width>601</width>
+         <height>531</height>
         </rect>
        </property>
-       <property name="text">
-        <string>TextLabel</string>
+       <property name="currentIndex">
+        <number>0</number>
        </property>
+       <widget class="QWidget" name="pageSearch">
+        <widget class="QComboBox" name="comboBoxSearch">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>30</y>
+           <width>87</width>
+           <height>22</height>
+          </rect>
+         </property>
+         <item>
+          <property name="text">
+           <string>书名</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>作者</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>ISBN</string>
+          </property>
+         </item>
+        </widget>
+        <widget class="QLineEdit" name="lineEditSearch">
+         <property name="geometry">
+          <rect>
+           <x>130</x>
+           <y>30</y>
+           <width>281</width>
+           <height>21</height>
+          </rect>
+         </property>
+         <property name="placeholderText">
+          <string>输入要检索的内容</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="btnSearch">
+         <property name="geometry">
+          <rect>
+           <x>440</x>
+           <y>30</y>
+           <width>93</width>
+           <height>28</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>检索</string>
+         </property>
+        </widget>
+        <widget class="QTableWidget" name="tableWidgetSearch">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>70</y>
+           <width>551</width>
+           <height>291</height>
+          </rect>
+         </property>
+         <column>
+          <property name="text">
+           <string>书名</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>作者</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>ISBN</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>剩余数量</string>
+          </property>
+         </column>
+        </widget>
+        <widget class="QStackedWidget" name="stackedWidgetSearch">
+         <property name="geometry">
+          <rect>
+           <x>150</x>
+           <y>390</y>
+           <width>271</width>
+           <height>80</height>
+          </rect>
+         </property>
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <widget class="QWidget" name="pageReader">
+          <widget class="QPushButton" name="btnDetail">
+           <property name="geometry">
+            <rect>
+             <x>20</x>
+             <y>20</y>
+             <width>93</width>
+             <height>28</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>详情</string>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="btnBorrow">
+           <property name="geometry">
+            <rect>
+             <x>150</x>
+             <y>20</y>
+             <width>93</width>
+             <height>28</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>借阅</string>
+           </property>
+          </widget>
+         </widget>
+         <widget class="QWidget" name="pageAdmin">
+          <widget class="QPushButton" name="btnBorrow_2">
+           <property name="geometry">
+            <rect>
+             <x>140</x>
+             <y>30</y>
+             <width>93</width>
+             <height>28</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>更新图书信息</string>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="btnDetail_2">
+           <property name="geometry">
+            <rect>
+             <x>20</x>
+             <y>30</y>
+             <width>93</width>
+             <height>28</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>删除图书</string>
+           </property>
+          </widget>
+         </widget>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="page_2"/>
       </widget>
      </widget>
     </widget>

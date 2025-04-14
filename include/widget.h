@@ -25,7 +25,7 @@ private:
 
 private slots:
     void onPushButtonLoginClicked();
-    void onPushButtonLogoutClicked();
+    void onbtnLogoutClicked();
     void onPushButtonClicked();
 
 private:

@@ -58,6 +58,9 @@ void testUserDao() {
              << (deletedUser.getId() != -1 ? "Yes" : "No");
 }
 
+
+
+
 int main(int argc, char *argv[])
 {
 //    qDebug() << "Starting UserDao tests...";

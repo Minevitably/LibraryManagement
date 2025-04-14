@@ -12,8 +12,8 @@ Widget::Widget(QWidget *parent)
             this, &Widget::onPushButtonLoginClicked);
 
     // 登出按钮
-    connect(ui->pushButtonLogout, &QPushButton::clicked,
-            this, &Widget::onPushButtonLogoutClicked);
+    connect(ui->btnLogout, &QPushButton::clicked,
+            this, &Widget::onbtnLogoutClicked);
     connect(ui->pushButton, &QPushButton::clicked,
             this, &Widget::onPushButtonClicked);
 
@@ -117,7 +117,7 @@ void Widget::setupAdminUI() {
 
 }
 
-void Widget::onPushButtonLogoutClicked() {
+void Widget::onbtnLogoutClicked() {
     ui->stackedWidget->setCurrentIndex(0);
 
 }
