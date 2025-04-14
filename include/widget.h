@@ -17,5 +17,7 @@ public:
 
 private:
     Ui::Widget *ui;
+
+    void onPushButtonClicked();
 };
 #endif // WIDGET_H
