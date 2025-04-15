@@ -188,6 +188,9 @@ void Widget::setupReaderUI() {
     // 普通用户的图书检索视图底部两个按钮为详情和借阅
     ui->stackedWidgetSearch->setCurrentIndex(0);
 
+    // 普通用户没有图书入库按钮
+    ui->btnAddBook->hide();
+
 }
 
 /**
@@ -197,6 +200,7 @@ void Widget::setupAdminUI() {
     ui->labelUserType->setText("admin");
     // 管理员的的图书检索视图底部两个按钮为删除和更新图书信息
     ui->stackedWidgetSearch->setCurrentIndex(1);
+    ui->btnAddBook->show();
 
 }
 
