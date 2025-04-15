@@ -6,6 +6,8 @@
 #include <QSqlQuery>
 #include <QDebug>
 #include <QSqlError>
+#include "user.h"
+#include "book.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
@@ -44,6 +46,8 @@ private:
     void onRememberMe();
     void setupReaderUI();
     void setupAdminUI();
+    Book getSelectedBook();
+    void refreshBookList();
 
 
 private slots:
@@ -51,11 +55,15 @@ private slots:
     void onBtnSearchBookClicked();
     void onBtnSearchClicked();
     void onBtnDetailClicked();
+    void onBtnBorrowClicked();
+    void onBtnDeleteBookClicked();
+    void onBtnUpdateBookClicked();
 
     void onBtnLogoutClicked();
     void onPushButtonClicked();
 
 private:
     Ui::Widget *ui;
+    User m_currentUser;
 };
 #endif // WIDGET_H

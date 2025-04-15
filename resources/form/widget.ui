@@ -331,14 +331,14 @@
         <widget class="QStackedWidget" name="stackedWidgetSearch">
          <property name="geometry">
           <rect>
-           <x>150</x>
+           <x>70</x>
            <y>390</y>
-           <width>271</width>
+           <width>461</width>
            <height>80</height>
           </rect>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="pageReader">
           <widget class="QPushButton" name="btnDetail">
@@ -369,7 +369,20 @@
           </widget>
          </widget>
          <widget class="QWidget" name="pageAdmin">
-          <widget class="QPushButton" name="btnBorrow_2">
+          <widget class="QPushButton" name="btnUpdateBook">
+           <property name="geometry">
+            <rect>
+             <x>260</x>
+             <y>30</y>
+             <width>111</width>
+             <height>28</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>更新图书信息</string>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="btnDeleteBook">
            <property name="geometry">
             <rect>
              <x>140</x>
@@ -379,20 +392,20 @@
             </rect>
            </property>
            <property name="text">
-            <string>更新图书信息</string>
+            <string>删除图书</string>
            </property>
           </widget>
-          <widget class="QPushButton" name="btnDetail_2">
+          <widget class="QPushButton" name="btnDetailAdmin">
            <property name="geometry">
             <rect>
-             <x>20</x>
+             <x>30</x>
              <y>30</y>
              <width>93</width>
              <height>28</height>
             </rect>
            </property>
            <property name="text">
-            <string>删除图书</string>
+            <string>详情</string>
            </property>
           </widget>
          </widget>

@@ -40,6 +40,25 @@ CREATE TABLE books
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
+-- 创建借阅表
+CREATE TABLE borrow_records (
+                                id INT AUTO_INCREMENT PRIMARY KEY,
+                                book_id INT NOT NULL,                      -- 图书ID
+                                user_id INT NOT NULL,                      -- 用户ID
+                                borrow_date DATETIME NOT NULL,             -- 借阅日期
+                                due_date DATETIME NOT NULL,                -- 应还日期
+                                return_date DATETIME,                      -- 实际归还日期(为空表示未归还)
+                                status ENUM('借出', '已还', '逾期') NOT NULL DEFAULT '借出', -- 借阅状态
+                                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                                FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE,  -- 外键关联图书表
+                                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,  -- 外键关联用户表
+                                INDEX idx_book_id (book_id),
+                                INDEX idx_user_id (user_id),
+                                INDEX idx_status (status),
+                                INDEX idx_due_date (due_date)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 -- 插入管理员用户
 INSERT INTO users (username, password, name, user_type)
 VALUES ('admin', '123456', '系统管理员', 'admin');
