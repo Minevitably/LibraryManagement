@@ -26,6 +26,16 @@ Widget::Widget(QWidget *parent)
     // 图书检索按钮（切换到图书检索视图）
     connect(ui->btnSearchBook, &QPushButton::clicked,
             this, &Widget::onBtnSearchBookClicked);
+    // 借阅详情按钮（切换到借阅详情视图）
+    connect(ui->btnBorDetail, &QPushButton::clicked,
+            this, &Widget::onBtnBorDetailClicked);
+    // 个人信息按钮（切换到个人信息视图）
+    connect(ui->btnSelf, &QPushButton::clicked,
+            this, &Widget::onBtnSelfClicked);
+    // 图书入库按钮（切换到图书入库视图）
+    connect(ui->btnAddBook, &QPushButton::clicked,
+            this, &Widget::onBtnAddBookClicked);
+
     // 检索按钮（检索图书）
     connect(ui->btnSearch, &QPushButton::clicked,
             this, &Widget::onBtnSearchClicked);
@@ -135,8 +145,7 @@ void Widget::onPushButtonLoginClicked() {
     if (!valid) {
         // 登录失败，弹出对话框提示
         qDebug() << "username or password is wrong.";
-        QMessageBox::warning(this, "登录失败", "用户名或密码不正确"
-                                               ".");
+        QMessageBox::warning(this, "登录失败", "用户名或密码不正确.");
         return;
     }
 
@@ -227,6 +236,34 @@ void Widget::onPushButtonClicked() {
 void Widget::onBtnSearchBookClicked() {
     ui->stackedWidgetMain->setCurrentIndex(VIEW_SEARCH_BOOK);
 }
+
+/**
+ * 借阅详情按钮
+ * 切换到借阅详情视图
+ */
+void Widget::onBtnBorDetailClicked() {
+    ui->stackedWidgetMain->setCurrentIndex(VIEW_BORROW_DETAIL);
+
+}
+
+/**
+ * 个人信息按钮
+ * 切换到个人信息视图
+ */
+void Widget::onBtnSelfClicked() {
+    ui->stackedWidgetMain->setCurrentIndex(VIEW_SELF_INFO);
+
+}
+
+/**
+ * 图书入库按钮
+ * 切换到图书入库视图
+ */
+void Widget::onBtnAddBookClicked() {
+    ui->stackedWidgetMain->setCurrentIndex(VIEW_ADD_BOOK);
+
+}
+
 
 
 void Widget::refreshBookList() {
@@ -440,6 +477,9 @@ void Widget::onBtnDeleteBookClicked() {
      refreshBookList(); // 可以根据需要刷新书籍列表
 }
 
+/**
+ * 更新图书信息按钮
+ */
 void Widget::onBtnUpdateBookClicked() {
     Book fetchedBook = getSelectedBook();
     if (fetchedBook.getId() == -1) {

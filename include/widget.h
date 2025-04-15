@@ -53,6 +53,11 @@ private:
 private slots:
     void onPushButtonLoginClicked();
     void onBtnSearchBookClicked();
+    void onBtnBorDetailClicked();
+    void onBtnSelfClicked();
+    void onBtnAddBookClicked();
+
+
     void onBtnSearchClicked();
     void onBtnDetailClicked();
     void onBtnBorrowClicked();
