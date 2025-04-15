@@ -44,18 +44,27 @@ Widget::Widget(QWidget *parent)
             this, &Widget::onBtnDetailClicked);
     connect(ui->btnDetailAdmin, &QPushButton::clicked,
             this, &Widget::onBtnDetailClicked);
-
     // 借阅按钮
     connect(ui->btnBorrow, &QPushButton::clicked,
             this, &Widget::onBtnBorrowClicked);
-
     // 图书删除按钮
     connect(ui->btnDeleteBook, &QPushButton::clicked,
             this, &Widget::onBtnDeleteBookClicked);
-
     // 更新图书信息按钮
     connect(ui->btnUpdateBook, &QPushButton::clicked,
             this, &Widget::onBtnUpdateBookClicked);
+    // 借阅详情视图下的详情按钮
+    connect(ui->btnBookDetail, &QPushButton::clicked,
+            this, &Widget::onBtnBookDetailClicked);
+    // 归还图书按钮
+    connect(ui->btnReturn, &QPushButton::clicked,
+            this, &Widget::onBtnReturnClicked);
+    // 更新个人信息按钮
+    connect(ui->btnUpdateSelfInfo, &QPushButton::clicked,
+            this, &Widget::onBtnUpdateSelfInfoClicked);
+    // 图书入库按钮
+    connect(ui->btnDoAddBook, &QPushButton::clicked,
+            this, &Widget::onBtnDoAddBookClicked);
 
     connect(ui->pushButton, &QPushButton::clicked,
             this, &Widget::onPushButtonClicked);
@@ -244,7 +253,93 @@ void Widget::onBtnSearchBookClicked() {
 void Widget::onBtnBorDetailClicked() {
     ui->stackedWidgetMain->setCurrentIndex(VIEW_BORROW_DETAIL);
 
+    // 清空当前表格内容
+    ui->tableWidgetBor->clearContents();
+    ui->tableWidgetBor->setRowCount(0); // 重置行数
+
+    QList<BorrowRecord> records;
+
+    // 根据用户类型获取借阅记录
+    if (m_currentUser.getUserType() == User::ADMIN) {
+        records = BorrowRecordDao::getAllRecords();
+        // 在表格中显示借阅信息
+        for (const BorrowRecord &record: records) {
+            Book book = BookDao::getBookById(record.getBookId());
+            User user = UserDao::getUserById(record.getUserId());
+
+            int rowCount = ui->tableWidgetBor->rowCount();
+            ui->tableWidgetBor->insertRow(rowCount); // 插入新行
+
+            // 隐藏借阅ID、图书ID和用户ID列
+            ui->tableWidgetBor->setItem(rowCount, 6, new QTableWidgetItem
+                    (QString::number(record.getId()))); // 借阅ID
+            ui->tableWidgetBor->setItem(rowCount, 7, new QTableWidgetItem
+                    (QString::number(book.getId()))); // 图书ID
+            ui->tableWidgetBor->setItem(rowCount, 8, new QTableWidgetItem
+                    (QString::number(user.getId()))); // 用户ID
+
+            // 显示借阅信息
+//            ui->tableWidgetBor->setItem(rowCount, 3, new QTableWidgetItem(user.getUsername())); // 用户名
+            ui->tableWidgetBor->setItem(rowCount, 0, new QTableWidgetItem
+                    (user.getName())); // 用户姓名
+            ui->tableWidgetBor->setItem(rowCount, 1, new QTableWidgetItem
+                    (book.getTitle())); // 书名
+            ui->tableWidgetBor->setItem(rowCount, 2, new QTableWidgetItem
+                    (record.getBorrowDate().toString("yyyy-MM-dd"))); // 借出日期
+            ui->tableWidgetBor->setItem(rowCount, 3, new QTableWidgetItem
+                    (record.getDueDate().toString("yyyy-MM-dd"))); // 应还日期
+            ui->tableWidgetBor->setItem(rowCount, 4, new QTableWidgetItem
+                    (record.getReturnDate().toString("yyyy-MM-dd"))); // 归还日期
+            ui->tableWidgetBor->setItem(rowCount, 5, new QTableWidgetItem
+                    (record.getStatusString())); // 状态
+
+            ui->tableWidgetBor->setColumnHidden(0, false); // 隐藏读者列
+            ui->tableWidgetBor->setColumnHidden(6, true); // 隐藏借阅ID列
+            ui->tableWidgetBor->setColumnHidden(7, true); // 隐藏图书ID列
+            ui->tableWidgetBor->setColumnHidden(8, true); // 隐藏用户ID列
+        }
+    } else {
+        records = BorrowRecordDao::getRecordsByUserId(m_currentUser.getId());
+        // 在表格中显示借阅信息
+        for (const BorrowRecord &record: records) {
+            Book book = BookDao::getBookById(record.getBookId());
+            User user = UserDao::getUserById(record.getUserId());
+
+            int rowCount = ui->tableWidgetBor->rowCount();
+            ui->tableWidgetBor->insertRow(rowCount); // 插入新行
+
+            // 隐藏借阅ID、图书ID和用户ID列
+            ui->tableWidgetBor->setItem(rowCount, 6, new QTableWidgetItem
+                    (QString::number(record.getId()))); // 借阅ID
+            ui->tableWidgetBor->setItem(rowCount, 7, new QTableWidgetItem
+                    (QString::number(book.getId()))); // 图书ID
+            ui->tableWidgetBor->setItem(rowCount, 8, new QTableWidgetItem
+                    (QString::number(user.getId()))); // 用户ID
+
+            // 显示借阅信息
+//            ui->tableWidgetBor->setItem(rowCount, 3, new QTableWidgetItem(user.getUsername())); // 用户名
+//            ui->tableWidgetBor->setItem(rowCount, 4, new QTableWidgetItem(user.getName())); // 用户姓名
+            ui->tableWidgetBor->setItem(rowCount, 1, new QTableWidgetItem
+                    (book.getTitle())); // 书名
+            ui->tableWidgetBor->setItem(rowCount, 2, new QTableWidgetItem
+                    (record.getBorrowDate().toString("yyyy-MM-dd"))); // 借出日期
+            ui->tableWidgetBor->setItem(rowCount, 3, new QTableWidgetItem
+                    (record.getDueDate().toString("yyyy-MM-dd"))); // 应还日期
+            ui->tableWidgetBor->setItem(rowCount, 4, new QTableWidgetItem
+                    (record.getReturnDate().toString("yyyy-MM-dd"))); // 归还日期
+            ui->tableWidgetBor->setItem(rowCount, 5, new QTableWidgetItem
+                    (record.getStatusString())); // 状态
+
+            ui->tableWidgetBor->setColumnHidden(0, true); // 隐藏读者列
+            ui->tableWidgetBor->setColumnHidden(6, true); // 隐藏借阅ID列
+            ui->tableWidgetBor->setColumnHidden(7, true); // 隐藏图书ID列
+            ui->tableWidgetBor->setColumnHidden(8, true); // 隐藏用户ID列
+        }
+    }
+
+
 }
+
 
 /**
  * 个人信息按钮
@@ -252,6 +347,9 @@ void Widget::onBtnBorDetailClicked() {
  */
 void Widget::onBtnSelfClicked() {
     ui->stackedWidgetMain->setCurrentIndex(VIEW_SELF_INFO);
+    ui->lineEditUpdateUsername->setPlaceholderText(m_currentUser.getUsername());
+    ui->lineEditUpdateName->setPlaceholderText(m_currentUser.getName());
+    ui->lineEditUpdatePasswod->setPlaceholderText(m_currentUser.getPassword());
 
 }
 
@@ -264,8 +362,9 @@ void Widget::onBtnAddBookClicked() {
 
 }
 
-
-
+/**
+ * 刷新图书检索列表
+ */
 void Widget::refreshBookList() {
     int option = ui->comboBoxSearch->currentIndex();
     QString searchText = ui->lineEditSearch->text().trimmed();
@@ -336,7 +435,10 @@ void Widget::onBtnSearchClicked() {
     this->refreshBookList();
 }
 
-
+/**
+ * 获取当前选择的图书
+ * @return
+ */
 Book Widget::getSelectedBook() {
     // 获取当前选中的行
     int currentRow = ui->tableWidgetSearch->currentRow();
@@ -355,6 +457,40 @@ Book Widget::getSelectedBook() {
     }
 
     return fetchedBook; // 返回有效的 Book 对象
+}
+
+/**
+ * 获取当前选中的借阅详情
+ * @return
+ */
+BorrowRecord Widget::getSelectedBorrowRecord() {
+    // 获取当前选中的行
+    int currentRow = ui->tableWidgetBor->currentRow();
+    if (currentRow < 0) {
+        QMessageBox::warning(this, "提示", "请先选择一条借阅记录");
+        return BorrowRecord(); // 返回一个无效的 BorrowRecord 对象
+    }
+
+    // 从表格中获取 Record ID
+    QString recordIdString = ui->tableWidgetBor->item(currentRow, 6)->text();
+
+    // 将 Record ID 转换为 int
+    bool conversionOk;
+    int recordId = recordIdString.toInt(&conversionOk);
+
+    if (!conversionOk) {
+        QMessageBox::warning(this, "转换错误", "无效的借阅记录ID");
+        return BorrowRecord(); // 返回一个无效的 BorrowRecord 对象
+    }
+
+    // 获取借阅记录详细信息
+    BorrowRecord fetchedBorrowRecord = BorrowRecordDao::getRecordById(recordId);
+    if (fetchedBorrowRecord.getId() == -1) {
+        QMessageBox::warning(this, "错误", "获取图书信息失败");
+        return BorrowRecord(); // 返回一个无效的 BorrowRecord 对象
+    }
+
+    return fetchedBorrowRecord; // 返回有效的 BorrowRecord 对象
 }
 
 /**
@@ -474,7 +610,7 @@ void Widget::onBtnDeleteBookClicked() {
     }
 
     // 刷新显示
-     refreshBookList(); // 可以根据需要刷新书籍列表
+    refreshBookList(); // 可以根据需要刷新书籍列表
 }
 
 /**
@@ -490,10 +626,187 @@ void Widget::onBtnUpdateBookClicked() {
     updatebookDialog->setAttribute(Qt::WA_DeleteOnClose); // 窗口关闭时自动删除
     updatebookDialog->setBookData(fetchedBook);
     // 连接 accepted 信号
-    connect(updatebookDialog, &QDialog::accepted, this, &Widget::refreshBookList);
+    connect(updatebookDialog, &QDialog::accepted, this,
+            &Widget::refreshBookList);
 
     updatebookDialog->show();
 
+}
+
+/**
+ * 归还图书
+ */
+void Widget::onBtnReturnClicked() {
+    BorrowRecord borrowRecord = this->getSelectedBorrowRecord();
+    qDebug() << "借阅id:" + borrowRecord.getId();
+    if (borrowRecord.getId() == -1) {
+        QMessageBox::critical(this, "错误", "无效的借阅id");
+        return; // 如果获取失败，直接返回
+    }
+
+    Book fetchedBook = BookDao::getBookById(borrowRecord.getBookId());
+    if (fetchedBook.getId() == -1) {
+        QMessageBox::critical(this, "错误", "无效的图书id");
+        return; // 如果获取失败，直接返回
+    }
+
+    // 弹出确认对话框
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this, "确认归还",
+                                  QString("确定要归还图书《%1》吗？").arg(
+                                          fetchedBook.getTitle()),
+                                  QMessageBox::Yes | QMessageBox::No);
+    if (reply == QMessageBox::Yes) {
+        borrowRecord.setStatus(BorrowRecord::RETURNED);
+        QDateTime returnDate = QDateTime::currentDateTime();
+        borrowRecord.setReturnDate(returnDate);
+        BorrowRecordDao::updateRecord(borrowRecord);
+        this->onBtnBorDetailClicked();
+        return;
+    } else {
+        return; // 用户选择了“否”，则不执行归还
+    }
+
+}
+
+/**
+ * 查看图书详情
+ */
+void Widget::onBtnBookDetailClicked() {
+    BorrowRecord borrowRecord = this->getSelectedBorrowRecord();
+    qDebug() << "借阅id:" + borrowRecord.getId();
+    if (borrowRecord.getId() == -1) {
+        QMessageBox::critical(this, "错误", "无效的借阅id");
+        return; // 如果获取失败，直接返回
+    }
+
+    Book fetchedBook = BookDao::getBookById(borrowRecord.getBookId());
+    if (fetchedBook.getId() == -1) {
+        QMessageBox::critical(this, "错误", "无效的图书id");
+        return; // 如果获取失败，直接返回
+    }
+
+    // 创建并显示详情窗口
+    bookdetail *detailDialog = new bookdetail();
+    detailDialog->setAttribute(Qt::WA_DeleteOnClose); // 窗口关闭时自动删除
+    detailDialog->setBookData(fetchedBook);
+    detailDialog->show();
+}
+
+/**
+ * 更新个人信息按钮
+ */
+void Widget::onBtnUpdateSelfInfoClicked() {
+    User updatedUser = m_currentUser;
+    updatedUser.setUsername(ui->lineEditUpdateUsername->text());
+    updatedUser.setName(ui->lineEditUpdateName->text());
+    updatedUser.setPassword(ui->lineEditUpdatePasswod->text());
+
+
+    if (updatedUser.getUsername().isEmpty() &&
+        updatedUser.getName().isEmpty() &&
+        updatedUser.getPassword().isEmpty()) {
+        QMessageBox::information(this, "提示", "至少需要修改一项信息");
+        return;
+    }
+
+    if (updatedUser.getUsername().isEmpty() ||
+        updatedUser.getName().isEmpty() ||
+        updatedUser.getPassword().isEmpty()) {
+        // 未填写的信息将使用默认值
+        QMessageBox::information(this, "提示", "未填写的信息将使用默认值");
+        if (updatedUser.getUsername().isEmpty()) {
+
+            updatedUser.setUsername(ui->lineEditUpdateUsername->placeholderText());
+            qDebug() << "getUsername:" + updatedUser.getUsername();
+        }
+        if (updatedUser.getName().isEmpty()) {
+            updatedUser.setName(ui->lineEditUpdateName->placeholderText());
+            qDebug() << "getName:" + updatedUser.getName();
+        }
+        if (updatedUser.getPassword().isEmpty()) {
+            updatedUser.setPassword(ui->lineEditUpdatePasswod->placeholderText());
+            qDebug() << "getPassword:" + updatedUser.getPassword();
+        }
+    }
+
+
+    if (UserDao::updateUser(updatedUser)) {
+        QMessageBox::information(this, "提示", "更新用户信息成功，请重新登录");
+        ui->stackedWidget->setCurrentIndex(PAGE_LOGIN);
+
+    } else {
+        QMessageBox::critical(this, "错误",
+                              "更新用户信息失败，建议尝试使用其它用户名");
+        return;
+    }
+
+
+}
+
+/**
+ * 图书入库按钮
+ */
+void Widget::onBtnDoAddBookClicked() {
+    Book book = Book();
+
+    // 获取并验证标题
+    QString title = ui->lineEditTitle->text().trimmed();
+    if (title.isEmpty()) {
+        QMessageBox::warning(this, "错误", "书名不能为空");
+        return;
+    }
+    book.setTitle(title);
+
+    // 获取并验证作者
+    QString author = ui->lineEditAuthor->text().trimmed();
+    if (author.isEmpty()) {
+        QMessageBox::warning(this, "错误", "作者不能为空");
+        return;
+    }
+    book.setAuthor(author);
+
+    // 获取并验证ISBN
+    QString isbn = ui->lineEditIsbn->text().trimmed();
+    if (isbn.isEmpty()) {
+        QMessageBox::warning(this, "错误", "ISBN不能为空");
+        return;
+    }
+    book.setIsbn(isbn);
+
+    // 获取其他可选字段
+    book.setPublisher(ui->lineEditPublisher->text().trimmed());
+    book.setDescription(ui->textEditDescription->toPlainText().trimmed());
+    book.setLanguage(ui->lineEditLanguage->text().trimmed());
+
+    // 处理出版日期
+    QString dateStr = ui->lineEditPublishDate->text().trimmed();
+    if (!dateStr.isEmpty()) {
+        QDate publishDate = QDate::fromString(dateStr, "yyyy-MM-dd");
+        if (!publishDate.isValid()) {
+            QMessageBox::warning(this, "错误", "日期格式不正确，请使用yyyy-MM-dd格式");
+            return;
+        }
+        book.setPublishDate(publishDate);
+    } else {
+        book.setPublishDate(QDate()); // 设置为无效日期
+    }
+
+    // 处理库存数量
+    bool ok;
+    int quantity = ui->lineEditQuantity->text().toInt(&ok);
+    if (!ok || quantity < 0) {
+        QMessageBox::warning(this, "错误", "库存数量必须是非负整数");
+        return;
+    }
+    book.setQuantity(quantity);
+
+    // 更新图书信息
+    if (!BookDao::addBook(book)) {
+        QMessageBox::critical(this, "错误", "图书入库失败");
+        return;
+    }
+    QMessageBox::information(this, "提示", "图书入库成功");
 }
 
 
