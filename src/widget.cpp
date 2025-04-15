@@ -1,3 +1,4 @@
+#include <QMessageBox>
 #include "widget.h"
 #include "ui_widget.h"
 #include "dbutil.h"
@@ -29,6 +30,11 @@ Widget::Widget(QWidget *parent)
     // 检索按钮（检索图书）
     connect(ui->btnSearch, &QPushButton::clicked,
             this, &Widget::onBtnSearchClicked);
+
+    // 详情按钮
+    connect(ui->btnDetail, &QPushButton::clicked,
+            this, &Widget::onBtnDetailClicked);
+
 
     connect(ui->pushButton, &QPushButton::clicked,
             this, &Widget::onPushButtonClicked);
@@ -260,6 +266,38 @@ void Widget::onBtnSearchClicked() {
 
     // 显示检索结果数量
     qDebug() << "Found" << bookList.size() << "books.";
+}
+
+
+#include "bookdetail.h"
+/**
+ * 详情按钮
+ * 如果在列表中选中了某项图书则弹出新窗口，显示该图书的所有信息
+ * 否则弹窗提示没有选中图书
+ */
+void Widget::onBtnDetailClicked() {
+    // 获取当前选中的行
+    int currentRow = ui->tableWidgetSearch->currentRow();
+    if (currentRow < 0) {
+        QMessageBox::warning(this, "提示", "请先选择一本书籍");
+        return;
+    }
+
+    // 从表格中获取ISBN
+    QString isbn = ui->tableWidgetSearch->item(currentRow, 2)->text();
+
+    // 获取图书详细信息
+    Book fetchedBook = BookDao::getBookByIsbn(isbn);
+    if (fetchedBook.getId() == -1) {
+        QMessageBox::warning(this, "错误", "获取图书信息失败");
+        return;
+    }
+
+    // 创建并显示详情窗口
+    bookdetail *detailDialog = new bookdetail();
+    detailDialog->setAttribute(Qt::WA_DeleteOnClose); // 窗口关闭时自动删除
+    detailDialog->setBookData(fetchedBook);
+    detailDialog->show();
 }
 
 

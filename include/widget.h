@@ -50,6 +50,7 @@ private slots:
     void onPushButtonLoginClicked();
     void onBtnSearchBookClicked();
     void onBtnSearchClicked();
+    void onBtnDetailClicked();
 
     void onBtnLogoutClicked();
     void onPushButtonClicked();
