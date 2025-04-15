@@ -16,13 +16,13 @@
 Widget::Widget(QWidget *parent)
         : QWidget(parent), ui(new Ui::Widget) {
     ui->setupUi(this);
-
+    this->setWindowTitle("图书管理系统");
     // 登录按钮
     connect(ui->pushButtonLogin, &QPushButton::clicked,
             this, &Widget::onPushButtonLoginClicked);
     // 登出按钮
-    connect(ui->btnLogout, &QPushButton::clicked,
-            this, &Widget::onBtnLogoutClicked);
+//    connect(ui->btnLogout, &QPushButton::clicked,
+//            this, &Widget::onBtnLogoutClicked);
     // 图书检索按钮（切换到图书检索视图）
     connect(ui->btnSearchBook, &QPushButton::clicked,
             this, &Widget::onBtnSearchBookClicked);
@@ -66,8 +66,8 @@ Widget::Widget(QWidget *parent)
     connect(ui->btnDoAddBook, &QPushButton::clicked,
             this, &Widget::onBtnDoAddBookClicked);
 
-    connect(ui->pushButton, &QPushButton::clicked,
-            this, &Widget::onPushButtonClicked);
+//    connect(ui->pushButton, &QPushButton::clicked,
+//            this, &Widget::onPushButtonClicked);
 
     // 默认位于登录页面
     ui->stackedWidget->setCurrentIndex(PAGE_LOGIN);
@@ -184,7 +184,7 @@ void Widget::onPushButtonLoginClicked() {
  * 设置登录成功后的读者视图
  */
 void Widget::setupReaderUI() {
-    ui->labelUserType->setText("reader");
+//    ui->labelUserType->setText("reader");
     // 普通用户的图书检索视图底部两个按钮为详情和借阅
     ui->stackedWidgetSearch->setCurrentIndex(0);
 
@@ -197,7 +197,7 @@ void Widget::setupReaderUI() {
  * 设置登录成功后的管理员视图
  */
 void Widget::setupAdminUI() {
-    ui->labelUserType->setText("admin");
+//    ui->labelUserType->setText("admin");
     // 管理员的的图书检索视图底部两个按钮为删除和更新图书信息
     ui->stackedWidgetSearch->setCurrentIndex(1);
     ui->btnAddBook->show();
@@ -217,7 +217,7 @@ void Widget::onBtnLogoutClicked() {
  * 没什么用的按钮，用来测试数据库是否可用
  */
 void Widget::onPushButtonClicked() {
-    ui->label->setText("Database Connected!");
+//    ui->label->setText("Database Connected!");
     // 获取数据库连接
     QSqlDatabase db = DBUtil::getConnection();
     if (db.isValid()) {
@@ -341,6 +341,18 @@ void Widget::onBtnBorDetailClicked() {
         }
     }
 
+    // 遍历所有单元格
+    for (int row = 0; row < ui->tableWidgetBor->rowCount(); ++row) {
+        for (int col = 0; col < ui->tableWidgetBor->columnCount(); ++col) {
+            QTableWidgetItem *item = ui->tableWidgetBor->item(row, col);
+            if (!item) {
+                item = new QTableWidgetItem();
+                ui->tableWidgetBor->setItem(row, col, item);
+            }
+            item->setTextAlignment(Qt::AlignCenter);  // 水平和垂直居中
+        }
+    }
+
 
 }
 
@@ -427,7 +439,17 @@ void Widget::refreshBookList() {
 
     // 自动调整列宽
     ui->tableWidgetSearch->resizeColumnsToContents();
-
+    // 遍历所有单元格
+    for (int row = 0; row < ui->tableWidgetSearch->rowCount(); ++row) {
+        for (int col = 0; col < ui->tableWidgetSearch->columnCount(); ++col) {
+            QTableWidgetItem *item = ui->tableWidgetSearch->item(row, col);
+            if (!item) {
+                item = new QTableWidgetItem();
+                ui->tableWidgetSearch->setItem(row, col, item);
+            }
+            item->setTextAlignment(Qt::AlignCenter);  // 水平和垂直居中
+        }
+    }
     // 显示检索结果数量
     qDebug() << "Found" << bookList.size() << "books.";
 }
