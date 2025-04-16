@@ -79,6 +79,9 @@ Widget::Widget(QWidget *parent)
     connect(ui->btnAddUser, &QPushButton::clicked,
             this, &Widget::onBtnAddUserClicked);
 
+    // 生成报表按钮
+    connect(ui->btnGenReport, &QPushButton::clicked,
+            this, &Widget::onBtnGenReportClicked);
 
 //    connect(ui->pushButton, &QPushButton::clicked,
 //            this, &Widget::onPushButtonClicked);
@@ -206,6 +209,9 @@ void Widget::setupReaderUI() {
     ui->btnAddBook->hide();
     // 普通用户没有用户管理按钮
     ui->btnUserMgmt->hide();
+    // 普通用户没有生成报表按钮
+    ui->btnGenReport->hide();
+
 
 }
 
@@ -218,6 +224,8 @@ void Widget::setupAdminUI() {
     ui->stackedWidgetSearch->setCurrentIndex(1);
     ui->btnAddBook->show();
     ui->btnUserMgmt->show();
+    ui->btnGenReport->show();
+
 
 }
 
@@ -972,6 +980,87 @@ void Widget::onBtnAddUserClicked() {
     connect(adduserDialog, &adduser::userAdded, this,
             &Widget::refreshUserList);
     adduserDialog->show();
+}
+
+
+
+void Widget::onBtnGenReportClicked()
+{
+    QTableWidget *table = ui->tableWidgetBor;
+
+    // 检查表格是否有数据
+    if (table->rowCount() == 0 || table->columnCount() == 0)
+    {
+        QMessageBox::warning(this, "警告", "表格中没有数据可导出！");
+        return;
+    }
+
+    // 让用户选择保存路径
+    QString fileName = QFileDialog::getSaveFileName(
+            this,
+            "保存 CSV 文件",
+            QDir::homePath() + "/report.csv", // 默认路径
+            "CSV 文件 (*.csv)"
+    );
+
+    if (fileName.isEmpty())
+    {
+        return; // 用户取消保存
+    }
+
+    // 确保文件名以 .csv 结尾
+    if (!fileName.endsWith(".csv", Qt::CaseInsensitive))
+    {
+        fileName += ".csv";
+    }
+
+    QFile file(fileName);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        QMessageBox::critical(this, "错误", "无法创建文件！");
+        return;
+    }
+
+    QTextStream out(&file);
+
+    // 写入表头（列名）
+    QStringList headers;
+    for (int col = 0; col < table->columnCount(); ++col)
+    {
+        QTableWidgetItem *header = table->horizontalHeaderItem(col);
+        if (header)
+        {
+            // 处理 CSV 特殊字符（如逗号、引号）
+            QString text = header->text();
+            text.replace("\"", "\"\""); // 双引号转义
+            headers << "\"" + text + "\""; // 用引号包裹
+        }
+    }
+    out << headers.join(",") << "\n"; // 逗号分隔
+
+    // 写入表格数据
+    for (int row = 0; row < table->rowCount(); ++row)
+    {
+        QStringList rowData;
+        for (int col = 0; col < table->columnCount(); ++col)
+        {
+            QTableWidgetItem *item = table->item(row, col);
+            if (item)
+            {
+                QString text = item->text();
+                text.replace("\"", "\"\""); // 双引号转义
+                rowData << "\"" + text + "\"";
+            }
+            else
+            {
+                rowData << "\"\""; // 空单元格
+            }
+        }
+        out << rowData.join(",") << "\n"; // 逗号分隔
+    }
+
+    file.close();
+    QMessageBox::information(this, "成功", "报表文件已成功生成！");
 }
 
 

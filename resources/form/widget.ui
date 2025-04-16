@@ -863,7 +863,7 @@ QPushButton:pressed {
 }</string>
            </property>
            <property name="currentIndex">
-            <number>4</number>
+            <number>1</number>
            </property>
            <widget class="QWidget" name="pageSearch">
             <property name="styleSheet">
@@ -1576,6 +1576,46 @@ QPushButton:pressed {
                   </property>
                   <property name="text">
                    <string>归还</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="btnGenReport">
+                  <property name="minimumSize">
+                   <size>
+                    <width>110</width>
+                    <height>60</height>
+                   </size>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <family>Arial</family>
+                    <pointsize>11</pointsize>
+                   </font>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 88, 173);
+    border-radius: 5px;
+    background-color: rgb(42, 88, 173);
+    color: white;
+    padding: 5px;  /* 可选：内边距 */
+}
+
+/* 鼠标悬停时改变背景色和边框 */
+QPushButton:hover {
+    background-color: rgb(30, 70, 150);  /* 更深的蓝色 */
+    border: 1px solid rgb(30, 70, 150);
+}
+
+/* 鼠标按下时效果（可选） */
+QPushButton:pressed {
+    background-color: rgb(20, 50, 120);  /* 更深的颜色 */
+    border: 1px solid rgb(20, 50, 120);
+}</string>
+                  </property>
+                  <property name="text">
+                   <string>生成报表</string>
                   </property>
                  </widget>
                 </item>

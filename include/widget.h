@@ -9,7 +9,9 @@
 #include "user.h"
 #include "book.h"
 #include "borrowrecord.h"
-
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QTextStream>
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
 QT_END_NAMESPACE
@@ -77,6 +79,7 @@ private slots:
     void onBtnDoAddBookClicked();
     void onBtnDeleteUserClicked();
     void onBtnAddUserClicked();
+    void onBtnGenReportClicked();
 
     void onBtnLogoutClicked();
     void onPushButtonClicked();
