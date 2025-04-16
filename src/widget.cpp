@@ -8,6 +8,7 @@
 #include "bookdetail.h"
 #include "borrowrecorddao.h"
 #include "updatebook.h"
+#include "adduser.h"
 
 /**
  * 构造函数
@@ -75,8 +76,10 @@ Widget::Widget(QWidget *parent)
             this, &Widget::onBtnDeleteUserClicked);
 
     // 注册用户按钮
-    connect(ui->btnDeleteBook, &QPushButton::clicked,
-            this, &Widget::onBtnDeleteBookClicked);
+    connect(ui->btnAddUser, &QPushButton::clicked,
+            this, &Widget::onBtnAddUserClicked);
+
+
 //    connect(ui->pushButton, &QPushButton::clicked,
 //            this, &Widget::onPushButtonClicked);
 
@@ -201,6 +204,8 @@ void Widget::setupReaderUI() {
 
     // 普通用户没有图书入库按钮
     ui->btnAddBook->hide();
+    // 普通用户没有用户管理按钮
+    ui->btnUserMgmt->hide();
 
 }
 
@@ -212,6 +217,7 @@ void Widget::setupAdminUI() {
     // 管理员的的图书检索视图底部两个按钮为删除和更新图书信息
     ui->stackedWidgetSearch->setCurrentIndex(1);
     ui->btnAddBook->show();
+    ui->btnUserMgmt->show();
 
 }
 
@@ -955,7 +961,17 @@ void Widget::onBtnDeleteUserClicked() {
     }
 
     // 刷新显示
-    refreshUserList(); // 可以根据需要刷新书籍列表
+    this->refreshUserList(); // 可以根据需要刷新书籍列表
+}
+
+void Widget::onBtnAddUserClicked() {
+    // 创建并显示详情窗口
+    auto *adduserDialog = new adduser();
+    adduserDialog->setAttribute(Qt::WA_DeleteOnClose); // 窗口关闭时自动删除
+    // 连接 accepted 信号
+    connect(adduserDialog, &adduser::userAdded, this,
+            &Widget::refreshUserList);
+    adduserDialog->show();
 }
 
 

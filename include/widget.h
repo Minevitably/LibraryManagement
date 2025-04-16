@@ -76,6 +76,7 @@ private slots:
     void onBtnUpdateSelfInfoClicked();
     void onBtnDoAddBookClicked();
     void onBtnDeleteUserClicked();
+    void onBtnAddUserClicked();
 
     void onBtnLogoutClicked();
     void onPushButtonClicked();
