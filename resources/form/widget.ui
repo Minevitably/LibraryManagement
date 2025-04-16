@@ -791,6 +791,43 @@ QPushButton:pressed {
              </widget>
             </item>
             <item>
+             <widget class="QPushButton" name="btnUserMgmt">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>45</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>Arial</family>
+                <pointsize>11</pointsize>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QPushButton {
+	border:0px;
+    background-color: white;
+    color: black;
+}
+
+/* 鼠标悬停时改变背景色 */
+QPushButton:hover {
+    background-color: rgb(42, 88, 173);
+	color:white;
+}
+
+/* 鼠标按下时效果（可选） */
+QPushButton:pressed {
+    background-color: rgb(20, 50, 120);  /* 更深的颜色 */
+}</string>
+              </property>
+              <property name="text">
+               <string>用户管理</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <spacer name="verticalSpacer_12">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
@@ -826,7 +863,7 @@ QPushButton:pressed {
 }</string>
            </property>
            <property name="currentIndex">
-            <number>0</number>
+            <number>4</number>
            </property>
            <widget class="QWidget" name="pageSearch">
             <property name="styleSheet">
@@ -2109,6 +2146,143 @@ QPushButton:pressed {
               </layout>
              </item>
             </layout>
+           </widget>
+           <widget class="QWidget" name="pageUserMgmt">
+            <property name="styleSheet">
+             <string notr="true">#pageUserMgmt {
+	background-color: rgb(255, 255, 255);
+}</string>
+            </property>
+            <widget class="QTableWidget" name="tableWidgetUserMgmt">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>20</y>
+               <width>734</width>
+               <height>443</height>
+              </rect>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">#tableWidgetBor {
+	border: 0px;
+}</string>
+             </property>
+             <property name="gridStyle">
+              <enum>Qt::NoPen</enum>
+             </property>
+             <column>
+              <property name="text">
+               <string>用户名</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>姓名</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>密码</string>
+              </property>
+             </column>
+             <column>
+              <property name="text">
+               <string>用户类型</string>
+              </property>
+             </column>
+            </widget>
+            <widget class="QPushButton" name="btnDeleteUser">
+             <property name="geometry">
+              <rect>
+               <x>263</x>
+               <y>480</y>
+               <width>110</width>
+               <height>60</height>
+              </rect>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>110</width>
+               <height>60</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Arial</family>
+               <pointsize>11</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 88, 173);
+    border-radius: 5px;
+    background-color: rgb(42, 88, 173);
+    color: white;
+    padding: 5px;  /* 可选：内边距 */
+}
+
+/* 鼠标悬停时改变背景色和边框 */
+QPushButton:hover {
+    background-color: rgb(30, 70, 150);  /* 更深的蓝色 */
+    border: 1px solid rgb(30, 70, 150);
+}
+
+/* 鼠标按下时效果（可选） */
+QPushButton:pressed {
+    background-color: rgb(20, 50, 120);  /* 更深的颜色 */
+    border: 1px solid rgb(20, 50, 120);
+}</string>
+             </property>
+             <property name="text">
+              <string>删除用户</string>
+             </property>
+            </widget>
+            <widget class="QPushButton" name="btnAddUser">
+             <property name="geometry">
+              <rect>
+               <x>380</x>
+               <y>480</y>
+               <width>120</width>
+               <height>60</height>
+              </rect>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>120</width>
+               <height>60</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Arial</family>
+               <pointsize>11</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton {
+    border: 1px solid rgb(42, 88, 173);
+    border-radius: 5px;
+    background-color: rgb(42, 88, 173);
+    color: white;
+    padding: 5px;  /* 可选：内边距 */
+}
+
+/* 鼠标悬停时改变背景色和边框 */
+QPushButton:hover {
+    background-color: rgb(30, 70, 150);  /* 更深的蓝色 */
+    border: 1px solid rgb(30, 70, 150);
+}
+
+/* 鼠标按下时效果（可选） */
+QPushButton:pressed {
+    background-color: rgb(20, 50, 120);  /* 更深的颜色 */
+    border: 1px solid rgb(20, 50, 120);
+}</string>
+             </property>
+             <property name="text">
+              <string>注册用户</string>
+             </property>
+            </widget>
            </widget>
           </widget>
          </item>

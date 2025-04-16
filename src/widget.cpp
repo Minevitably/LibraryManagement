@@ -35,6 +35,9 @@ Widget::Widget(QWidget *parent)
     // 图书入库按钮（切换到图书入库视图）
     connect(ui->btnAddBook, &QPushButton::clicked,
             this, &Widget::onBtnAddBookClicked);
+    // 用户管理按钮（切换到用户管理视图）
+    connect(ui->btnUserMgmt, &QPushButton::clicked,
+            this, &Widget::onBtnUserMgmtClicked);
 
     // 检索按钮（检索图书）
     connect(ui->btnSearch, &QPushButton::clicked,
@@ -66,6 +69,14 @@ Widget::Widget(QWidget *parent)
     connect(ui->btnDoAddBook, &QPushButton::clicked,
             this, &Widget::onBtnDoAddBookClicked);
 
+
+    // 删除用户按钮
+    connect(ui->btnDeleteUser, &QPushButton::clicked,
+            this, &Widget::onBtnDeleteUserClicked);
+
+    // 注册用户按钮
+    connect(ui->btnDeleteBook, &QPushButton::clicked,
+            this, &Widget::onBtnDeleteBookClicked);
 //    connect(ui->pushButton, &QPushButton::clicked,
 //            this, &Widget::onPushButtonClicked);
 
@@ -376,6 +387,15 @@ void Widget::onBtnSelfClicked() {
 void Widget::onBtnAddBookClicked() {
     ui->stackedWidgetMain->setCurrentIndex(VIEW_ADD_BOOK);
 
+}
+
+/**
+ * 用户管理按钮
+ * 切换到用户管理视图
+ */
+void Widget::onBtnUserMgmtClicked() {
+    ui->stackedWidgetMain->setCurrentIndex(VIEW_USER_MANAGEMENT);
+    this->refreshUserList();
 }
 
 /**
@@ -834,6 +854,112 @@ void Widget::onBtnDoAddBookClicked() {
     }
     QMessageBox::information(this, "提示", "图书入库成功");
 }
+
+
+/**
+ * 获取当前选择的用户
+ * @return
+ */
+User Widget::getSelectedUser() {
+    // 获取当前选中的行
+    int currentRow = ui->tableWidgetUserMgmt->currentRow();
+    if (currentRow < 0) {
+        QMessageBox::warning(this, "提示", "请先选择一个用户");
+        return User(); // 返回一个无效的 Book 对象
+    }
+
+    // 从表格中获取 用户名
+    QString username = ui->tableWidgetUserMgmt->item(currentRow, 0)->text();
+    // 获取图书详细信息
+    User fetchedUser = UserDao::getUserByUsername(username);
+    if (fetchedUser.getId() == -1) {
+        QMessageBox::warning(this, "错误", "获取用户信息失败");
+        return User(); // 返回一个无效的 User 对象
+    }
+
+    return fetchedUser; // 返回有效的 User 对象
+}
+
+/**
+ * 刷新用户视图的用户列表
+ */
+void Widget::refreshUserList() {
+    QList<User> userList = UserDao::getAllUsers();
+
+    // 清空表格
+    ui->tableWidgetUserMgmt->clearContents();
+    ui->tableWidgetUserMgmt->setRowCount(0);
+
+    // 设置表格列数和标题
+    ui->tableWidgetUserMgmt->setColumnCount(4);
+    QStringList headers;
+    headers << "用户名" << "姓名" << "密码" << "用户类型";
+    ui->tableWidgetUserMgmt->setHorizontalHeaderLabels(headers);
+
+    // 填充表格数据
+    for (const User &user: userList) {
+        int row = ui->tableWidgetUserMgmt->rowCount();
+        ui->tableWidgetUserMgmt->insertRow(row);
+
+        ui->tableWidgetUserMgmt->setItem(row, 0,
+                                       new QTableWidgetItem(user.getUsername()));
+        ui->tableWidgetUserMgmt->setItem(row, 1,
+                                       new QTableWidgetItem(user.getName()));
+        ui->tableWidgetUserMgmt->setItem(row, 2,
+                                       new QTableWidgetItem(user.getPassword()));
+        ui->tableWidgetUserMgmt->setItem(row, 3,
+                                         new QTableWidgetItem(user.getUserTypeString()));
+    }
+
+    // 自动调整列宽
+    ui->tableWidgetUserMgmt->resizeColumnsToContents();
+    // 遍历所有单元格
+    for (int row = 0; row < ui->tableWidgetUserMgmt->rowCount(); ++row) {
+        for (int col = 0; col < ui->tableWidgetUserMgmt->columnCount(); ++col) {
+            QTableWidgetItem *item = ui->tableWidgetUserMgmt->item(row, col);
+            if (!item) {
+                item = new QTableWidgetItem();
+                ui->tableWidgetUserMgmt->setItem(row, col, item);
+            }
+            item->setTextAlignment(Qt::AlignCenter);  // 水平和垂直居中
+        }
+    }
+    // 显示检索结果数量
+    qDebug() << "Found" << userList.size() << "users.";
+}
+
+/**
+ * 删除用户
+ */
+void Widget::onBtnDeleteUserClicked() {
+    User fetchedUser = getSelectedUser();
+    if (fetchedUser.getId() == -1) {
+        return; // 如果获取失败，直接返回
+    }
+
+    // 弹出确认对话框
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this, "确认删除",
+                                  QString("确定要删除用户%1吗？").arg(
+                                          fetchedUser.getUsername()),
+                                  QMessageBox::Yes | QMessageBox::No);
+    if (reply != QMessageBox::Yes) {
+        return; // 用户选择了“否”，则不执行删除
+    }
+
+    // 执行删除操作
+    if (UserDao::deleteUser(fetchedUser.getId())) {
+        QMessageBox::information(this, "成功", "用户删除成功。");
+    } else {
+        QMessageBox::critical(this, "错误", "用户删除失败，请重试。");
+    }
+
+    // 刷新显示
+    refreshUserList(); // 可以根据需要刷新书籍列表
+}
+
+
+
 
 
 

@@ -24,7 +24,8 @@ public:
         VIEW_SEARCH_BOOK, // 图书检索视图
         VIEW_BORROW_DETAIL, // 借阅详情视图
         VIEW_SELF_INFO, // 个人信息视图
-        VIEW_ADD_BOOK // 图书入库视图
+        VIEW_ADD_BOOK, // 图书入库视图
+        VIEW_USER_MANAGEMENT // 用户管理视图
     };
     // 页面
     // 系统只包含两个页面
@@ -49,17 +50,22 @@ private:
     void setupAdminUI();
     Book getSelectedBook();
     BorrowRecord getSelectedBorrowRecord();
+    User getSelectedUser();
     void refreshBookList();
+    void refreshUserList();
 
 
 private slots:
     void onPushButtonLoginClicked();
+
+    // 视图切换
     void onBtnSearchBookClicked();
     void onBtnBorDetailClicked();
     void onBtnSelfClicked();
     void onBtnAddBookClicked();
+    void onBtnUserMgmtClicked();
 
-
+    // 视图内的按钮
     void onBtnSearchClicked();
     void onBtnDetailClicked();
     void onBtnBorrowClicked();
@@ -69,6 +75,7 @@ private slots:
     void onBtnReturnClicked();
     void onBtnUpdateSelfInfoClicked();
     void onBtnDoAddBookClicked();
+    void onBtnDeleteUserClicked();
 
     void onBtnLogoutClicked();
     void onPushButtonClicked();

@@ -61,12 +61,31 @@ CREATE TABLE borrow_records (
 
 -- 插入管理员用户
 INSERT INTO users (username, password, name, user_type)
-VALUES ('admin', '123456', '系统管理员', 'admin');
+VALUES
+    ('admin1', '123456', '系统管理员', 'admin'),
+    ('admin2', '123456', '王伟', 'admin'),
+    ('admin3', '123456', '李强', 'admin'),
+    ('admin4', '123456', '张敏', 'admin'),
+    ('admin5', '123456', '刘芳', 'admin'),
+    ('admin6', '123456', '陈伟', 'admin'),
+    ('admin7', '123456', '杨秀英', 'admin'),
+    ('admin8', '123456', '赵静', 'admin'),
+    ('admin9', '123456', '周勇', 'admin'),
+    ('admin10', '123456', '吴霞', 'admin');
 
 -- 插入普通读者用户
 INSERT INTO users (username, password, name, user_type)
-VALUES ('reader1', '123456', '张三', 'reader'),
-       ('reader2', '123456', '李四', 'reader');
+VALUES
+    ('reader1', '123456', '张三', 'reader'),
+    ('reader2', '123456', '李四', 'reader'),
+    ('reader3', '123456', '王芳', 'reader'),
+    ('reader4', '123456', '刘伟', 'reader'),
+    ('reader5', '123456', '陈静', 'reader'),
+    ('reader6', '123456', '杨洋', 'reader'),
+    ('reader7', '123456', '黄丽', 'reader'),
+    ('reader8', '123456', '赵明', 'reader'),
+    ('reader9', '123456', '周小红', 'reader'),
+    ('reader10', '123456', '吴刚', 'reader');
 
 
 -- 插入20条图书记录
